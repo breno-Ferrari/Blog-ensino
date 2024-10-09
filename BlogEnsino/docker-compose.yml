@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: challenge2-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: tech123
+      POSTGRES_DB: challenge2
+    ports:
+      - "5434:5432"
+    networks:
+      - challenge_network
+
+  node:
+    build: .
+    container_name: challenge2-node
+    ports:
+      - "3001:3001"
+    environment:
+      - DB_HOST=postgres
+      - DB_USER=postgres
+      - DB_PASSWORD=tech123
+      - DB_NAME=challenge2
+    depends_on:
+      - postgres
+    networks:
+      - challenge_network
+
+networks:
+  challenge_network:
