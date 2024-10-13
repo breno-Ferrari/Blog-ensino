@@ -2,15 +2,13 @@ import { AuthService } from './AuthService';
 import { PostMapper } from "../mappers/PostMapper";
 import { PostRepository } from "../repositories/PostRepository";
 import { PostResource } from "../resources/PostResource";
-import { ValidateUserService } from "./ValidateService";
 
 const postRepository = new PostRepository()
-const validateUserService = new ValidateUserService()
 const authService = new AuthService()
 
 export class PostService {
     async create(title: string, text: string, token: string): Promise<PostResource | Error> {
-        await validateUserService.validateUser(token, "admin");
+        await authService.validateUser(token, "admin");
         const user = await authService.decodeToken(token)
         const createdPost = await postRepository.create(title, text, user.id);
         return PostMapper.mapToResource(createdPost);
@@ -47,7 +45,7 @@ export class PostService {
     }
 
     async update(id: string, token: string, updatedFields: { title: string; text: string }): Promise<PostResource | Error> {
-        await validateUserService.validateUser(token, "admin");
+        await authService.validateUser(token, "admin");
         const post = await this.findPostById(id);
         const updatedPost = await postRepository.update(post, updatedFields)
 
@@ -55,7 +53,7 @@ export class PostService {
     }
 
     async delete(id: string, token: string): Promise<void> {
-        await validateUserService.validateUser(token, "admin");
+        await authService.validateUser(token, "admin");
         const post = await this.findPostById(id);
 
         postRepository.delete(post)

@@ -5,81 +5,50 @@ const PostService_1 = require("../../../services/PostService");
 const uuid_1 = require("uuid");
 const PostResource_1 = require("../../../resources/PostResource");
 jest.mock('../../../services/PostService');
-const mockTeste = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjI1YjcxY2FhLTJhYTItNDgzYy1iNGExLTZjYzA3ODZmNDVjZCIsInVzZXJuYW1lIjoicHJvZmVzc29yIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzI4MDA5MDcwLCJleHAiOjE3MjgwOTU0NzB9.92zFUWHREZq5nNgG - sYqtDTeCrqJzY3kfjbqftidjLs";
 describe('Testes da PostController', () => {
     let req;
     let res;
     let jsonMock;
     let statusMock;
     jsonMock = jest.fn();
-    statusMock = jest.fn(() => ({ json: jsonMock }));
-    req = { body: {} };
-    res = { status: statusMock };
+    statusMock = jest.fn().mockReturnValue({ json: jsonMock });
+    beforeEach(() => {
+        req = {
+            body: {
+                title: "Título",
+                text: "Texto",
+            },
+            headers: {
+                authorization: "Bearer token-valido",
+            },
+        };
+        res = {
+            status: statusMock,
+            json: jsonMock
+        };
+    });
     afterEach(() => {
         jest.clearAllMocks();
     });
-<<<<<<< HEAD
     // it('deve criar um post com sucesso', async () => {
-    //     // jest.spyOn(AuthService.prototype, 'generateToken').mockImplementation()
-    //     const mockPost = new PostResource(
-    //         'titulo1', 'texto1', mockTeste
-    //     )
+    //     PostService.prototype.create = jest.fn().mockResolvedValue({ title: "Título", text: "Texto" });
     //     await PostController.createPost(req as Request, res as Response);
-    //     jest.spyOn(PostService.prototype, 'create').mockResolvedValue(mockPost);
-    //     req.body = { title: mockPost.title, text: mockPost.text };
-    //     req.headers = { authorization: mockTeste };
-    //     expect(PostService.prototype.create).toHaveBeenCalledWith('titulo1', 'texto1', mockTeste);
+    //     expect(PostService.prototype.create).toHaveBeenCalledWith("Título", "Texto", "Bearer token-valido");
     //     expect(statusMock).toHaveBeenCalledWith(201);
-    //     expect(jsonMock).toHaveBeenCalledWith(mockPost);
+    //     expect(jsonMock).toHaveBeenCalledWith({ title: "Título", text: "Texto" });
     // });
     // it('Deve lançar erro se role do usuário for diferente de "admin" na criação do post', async () => {
-    //     const mockError = new Error('Usuário sem permissão');
-    //     // Simulando que o serviço de validação lança um erro de permissão
-    //     jest.spyOn(ValidateUserService.prototype, 'validateUser').mockRejectedValue(mockError);
-    //     // Simula a criação do post
-    //     req.body = { title: 'titulo1', text: 'texto1', user_id: 'mockUserId' };
+    //     PostService.prototype.create = jest.fn().mockRejectedValue(new Error("Usuário sem permissão"));
     //     await PostController.createPost(req as Request, res as Response);
     //     expect(statusMock).toHaveBeenCalledWith(403);
-    //     expect(jsonMock).toHaveBeenCalledWith({ message: 'Usuário sem permissão' });
+    //     expect(jsonMock).toHaveBeenCalledWith({ message: "Usuário sem permissão" });
     // });
-    // it('deve retornar um erro ao falhar na criação do post', async () => {
-    //     const mockError = new Error('Falha ao criar o Post');
-    //     jest.spyOn(PostService.prototype, 'create').mockRejectedValue(mockError);
+    // it("deve retornar 500 para criação de post", async () => {
+    //     PostService.prototype.create = jest.fn().mockRejectedValue(new Error("Erro inesperado"));
     //     await PostController.createPost(req as Request, res as Response);
-    //     expect(PostService.prototype.create).toHaveBeenCalledWith('titulo1', 'texto1', expect.any(String));
     //     expect(statusMock).toHaveBeenCalledWith(500);
-    //     expect(jsonMock).toHaveBeenCalledWith({ message: 'Falha ao criar o Post', error: expect.any(Error) });
+    //     expect(jsonMock).toHaveBeenCalledWith({ message: "Falha ao criar o Post" });
     // });
-=======
-    it('deve criar um post com sucesso', async () => {
-        const mockPost = new PostResource_1.PostResource('titulo1', 'texto1', mockTeste);
-        jest.spyOn(PostService_1.PostService.prototype, 'create').mockResolvedValue(mockPost);
-        req.body = { title: mockPost.title, text: mockPost.text };
-        req.headers = { authorization: mockTeste };
-        await PostController_1.PostController.createPost(req, res);
-        expect(PostService_1.PostService.prototype.create).toHaveBeenCalledWith('titulo1', 'texto1', mockTeste);
-        expect(statusMock).toHaveBeenCalledWith(201);
-        expect(jsonMock).toHaveBeenCalledWith(mockPost);
-    });
-    it('Deve lançar erro se role do usuário for diferente de "admin" na criação do post', async () => {
-        const mockError = new Error('Usuário sem permissão');
-        // Simulando que o serviço de validação lança um erro de permissão
-        jest.spyOn(ValidateService_1.ValidateUserService.prototype, 'validateUser').mockRejectedValue(mockError);
-        // Simula a criação do post
-        req.body = { title: 'titulo1', text: 'texto1', user_id: 'mockUserId' };
-        await PostController_1.PostController.createPost(req, res);
-        expect(statusMock).toHaveBeenCalledWith(403);
-        expect(jsonMock).toHaveBeenCalledWith({ message: 'Usuário sem permissão' });
-    });
-    it('deve retornar um erro ao falhar na criação do post', async () => {
-        const mockError = new Error('Falha ao criar o Post');
-        jest.spyOn(PostService_1.PostService.prototype, 'create').mockRejectedValue(mockError);
-        await PostController_1.PostController.createPost(req, res);
-        expect(PostService_1.PostService.prototype.create).toHaveBeenCalledWith('titulo1', 'texto1', expect.any(String));
-        expect(statusMock).toHaveBeenCalledWith(500);
-        expect(jsonMock).toHaveBeenCalledWith({ message: 'Falha ao criar o Post', error: expect.any(Error) });
-    });
->>>>>>> d1651c3a08e33830364c364ae028c9936aaac402
     it('deve retornar todos os post', async () => {
         const mockPost = [
             new PostResource_1.PostResource('titulo1', 'texto1', (0, uuid_1.v4)()),

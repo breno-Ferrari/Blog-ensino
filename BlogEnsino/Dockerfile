@@ -7,10 +7,10 @@ WORKDIR /app
 # Copie os arquivos package.json e package-lock.json
 COPY package.json package-lock.json ./
 
-# Instale TODAS as dependências (incluindo as de desenvolvimento)
-RUN npm install --production=false
+RUN npm install
 
-# Copie o restante dos arquivos da aplicação
+RUN npm install -g ts-node
+
 COPY . .
 
 # Copie o arquivo Swagger já gerado localmente
@@ -22,5 +22,4 @@ RUN npm run build
 # Exponha a porta que o aplicativo usa
 EXPOSE 3001
 
-# Comando para iniciar o aplicativo
-CMD ["node", "dist/server.js"]
+CMD ["ts-node", "src/server.ts"]

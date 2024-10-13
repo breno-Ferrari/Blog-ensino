@@ -30,4 +30,14 @@ export class AuthService {
         const decoded = jwt.verify(token, env.SECRET_KEY) as DecodedToken;
         return new UserResource(decoded.username, decoded.role, decoded.id);
     }
+
+    async validateUser(token: string, role: string): Promise<void> {
+        const user = await this.decodeToken(token)
+        if (!user) {
+            throw new Error("Usuário não encontrado");
+        }
+        if (user.role !== role) {
+            throw new Error("Usuário sem permissão");
+        }
+    }
 }

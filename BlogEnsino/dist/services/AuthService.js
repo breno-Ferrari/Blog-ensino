@@ -26,5 +26,14 @@ class AuthService {
         const decoded = jsonwebtoken_1.default.verify(token, env_1.env.SECRET_KEY);
         return new UserResource_1.UserResource(decoded.username, decoded.role, decoded.id);
     }
+    async validateUser(token, role) {
+        const user = await this.decodeToken(token);
+        if (!user) {
+            throw new Error("Usuário não encontrado");
+        }
+        if (user.role !== role) {
+            throw new Error("Usuário sem permissão");
+        }
+    }
 }
 exports.AuthService = AuthService;
